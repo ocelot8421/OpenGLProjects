@@ -5,7 +5,8 @@
 
 //Adjusts the viewport to the window if the user resizes it
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-//void processInput(GLFWwindow *window);
+//Checks inputs
+void processInput(GLFWwindow *window);
 
 int main() {
     glfwInit();
@@ -41,6 +42,8 @@ int main() {
 
 	//RENDER LOOP (double buffer)
     while (!glfwWindowShouldClose(window)) {
+		// takes the window as input together with a key
+		processInput(window);
         
 		//Swaps buffer that contains color values for each pixel in GLFW's window
         glfwSwapBuffers(window);
@@ -60,4 +63,12 @@ int main() {
 //Adjusts the viewport to the window if the user resizes it
 void framebuffer_size_callback(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
+}
+
+// takes the window as input together with a key
+void processInput(GLFWwindow *window)
+{
+	// checks whether the user has pressed the escape key
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
 }
