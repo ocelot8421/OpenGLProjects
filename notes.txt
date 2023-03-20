@@ -1,0 +1,31 @@
+1.
+How to install OpenGL for C++ (Windows)
+https://www.youtube.com/watch?v=hRInLNR9iRg
+    mingw32-make
+
+1. - Troubleshooting
+bin> mingw32-make
+Makefile:2: *** missing separator.  Stop.
+Solved: https://www.youtube.com/watch?v=2nM6DBE0blA
+    View/Command Palette --> Convert Indentation  to tabs
+
+2.
+Michael Grieco -- C++ Open GL Tutorial - 2 - Hello, OpenGL
+https://www.youtube.com/watch?v=bQ3CPgw4lxY&list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&index=2
+magnitude ||u|| = "length"
+
+2. - Homogeneous Coordinate example
+https://www.tomdalling.com/blog/modern-opengl/explaining-homogenous-coordinates-and-projective-geometry/
+
+BME - VIK
+1.3. Differenciálgeometria
+https://youtu.be/0ZV4TjgI424?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=6130
+
+
+glViewport(0, 0, 900, 600);
+Hello Window: https://learnopengl.com/Getting-started/Hello-Window
+4.1. 2d képszintézis: Bevezetés: https://www.youtube.com/watch?v=-fX0UT2umIM&list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&index=15
+
+
+
+
