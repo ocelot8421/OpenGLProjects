@@ -1,7 +1,11 @@
-#include <glad/glad.h>
+#include <glad/glad.h> //this should be above GLFW header
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+
+//Adjusts the viewport to the window if the user resizes it
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+//void processInput(GLFWwindow *window);
 
 int main() {
     glfwInit();
@@ -28,18 +32,32 @@ int main() {
         return -1;
     }
 
-	//glViewport(0, 0, 900, 600);
+	//rendering window with its dimensions (lower left corner's coordinates, width, height)
+	glViewport(0, 0, 900, 600);
+
+	//Adjusts the viewport to the window if the user resizes it
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
  
+
+	//RENDER LOOP (double buffer)
     while (!glfwWindowShouldClose(window)) {
         
+		//Swaps buffer that contains color values for each pixel in GLFW's window
+        glfwSwapBuffers(window);
+		//checks keyboard input or mouse movement events, updates the window state, and calls the corresponding functions 
         glfwPollEvents();
  
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
  
-        glfwSwapBuffers(window);
     }
  
+	//clean,delete all of GLFW's resources
     glfwTerminate();
     return 0;
+}
+
+//Adjusts the viewport to the window if the user resizes it
+void framebuffer_size_callback(GLFWwindow* window, int width, int height){
+    glViewport(0, 0, width, height);
 }
