@@ -1,5 +1,8 @@
 #include <glad/glad.h> //this should be above GLFW header
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp> //OpenGL Mathematics
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 
@@ -9,8 +12,15 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 int main() {
-    glfwInit();
+	//glm test
+	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);						//(1;0;0;1) vector
+	glm::mat4 trans = glm::mat4(1.0f); 							//identity matrix ((1,0,0,0);(0,1,0,0);(0,0,1,0);(0,0,0,1))
+	trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f)); //translation (identityMatrix, translationBy(1,1,0))
+	vec = trans * vec;											//
+	std::cout << vec.x << vec.y << vec.z << std::endl;
 
+
+    glfwInit();
 	// openGL version 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -44,14 +54,18 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
 		// takes the window as input together with a key
 		processInput(window);
+
+		//RENDERING COMMANDS
+		// clear the screen's color buffer
+        //glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
         
 		//Swaps buffer that contains color values for each pixel in GLFW's window
         glfwSwapBuffers(window);
 		//checks keyboard input or mouse movement events, updates the window state, and calls the corresponding functions 
         glfwPollEvents();
  
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
  
     }
  
