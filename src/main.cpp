@@ -85,15 +85,22 @@ int main() {
 
 	//vertex array
 	float vertices[]  = {
-		-0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f
+		0.5f, 0.5f, 0.0f,    	// '. °.	right	top
+		-0.5f, 0.5f, 0.0f,		// °. '.	left	top
+		-0.5f, -0.5f, 0.0f,		// 'o '.	left	bottom
+		0.5f, -0.5f, 0.0f		// '. 'o	right	bottom
 	};
+	unsigned int indices[] = {
+		0,1,2,					//first triangle
+		2,3,0					//second triangle
+	};
+
+
 	// VAO, VBO
-	unsigned int VAO;
-	unsigned int VBO;
+	unsigned int VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 	//bind VAO
 	glBindVertexArray(VAO);
 	//bind VBO
@@ -102,7 +109,9 @@ int main() {
 	// set attribute pointer
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-
+	//set up EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     while (!glfwWindowShouldClose(window)) {								//RENDER LOOP (double buffer)
 		processInput(window);												// takes the window as input together with a key
@@ -113,11 +122,18 @@ int main() {
 		// draw shapes
 		glBindVertexArray(VAO);
 		glUseProgram(shaderProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);									//triangle (3 points)
+		//glDrawArrays(GL_TRIANGLES, 0, 6);									//rectangle (2 triangle, 6 points)
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);				//rectangle element
 
         glfwSwapBuffers(window);											//Swaps buffer that contains color values for each pixel in GLFW's window
         glfwPollEvents();													//checks keyboard input or mouse movement events, updates the window state, and calls the corresponding functions
     }
+
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VAO);
+	glDeleteBuffers(1, &EBO);
+
     glfwTerminate();														//clean,delete all of GLFW's resources
     return 0;
 }
@@ -136,7 +152,7 @@ std::string loadShaderSrc(const char* filename){
 	std::ifstream file;
 	std::stringstream buf;
 	std::string ret = "";
-	file.open(filename); //TODO (5) I/O
+	file.open(filename);													// learnopengl.com -- https://learnopengl.com/Getting-started/Shaders#:~:text=set%20its%20value.-,Reading%20from%20file,-We%27re%20using%20C
 	if(file.is_open()) {
 		buf << file.rdbuf();
 		ret = buf.str();

@@ -50,13 +50,15 @@ void printVector (int i, glm::vec4 vector){
  -- Vertex shader (Csúcspontárnyaló shader)                 Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=489
                                                             Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=869
                                                             learnopengl.com -- https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=start%20building%20those.-,Vertex%20shader,-The%20vertex%20shader
--   if(aPos.x < 0.0){                                       
+
+-   if(aPos.x < 0.0){                                       learnopengl.com -- https://learnopengl.com/Getting-started/Shaders#:~:text=float%20vertices%5B%5D%20%3D%20%7B%0A%20%20%20%20//%20positions%20%20%20%20%20%20%20%20%20//%20colors%0A%20%20%20%20%200.5f%2C%20%2D0.5f%2C%200.0f%2C%20%201.0f%2C%200.0f%2C%200.0f%2C%20%20%20//%20bottom%20right%0A%20%20%20%20%2D0.5f%2C%20%2D0.5f%2C%200.0f%2C%20%200.0f%2C%201.0f%2C%200.0f%2C%20%20%20//%20bottom%20left%0A%20%20%20%20%200.0f%2C%20%200.5f%2C%200.0f%2C%20%200.0f%2C%200.0f%2C%201.0f%20%20%20%20//%20top%20%0A%7D%3B                                      
         color = vec4(1.0, 0.0, 0.0, 1.0);
     } else if(aPos.x == 0){
         color = vec4(0.0, 1.0, 0.0, 1.0);
     } else {
         color = vec4(0.0, 0.0, 1.0, 1.0);       
     }
+. fragment interpolation                                    learningopengl -- https://learnopengl.com/Getting-started/Shaders#:~:text=of%20something%20called-,fragment%20interpolation,-in%20the%20fragment
 
 -- Fragment shader / Pixel shader                           Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=569
                                                             Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1006
@@ -87,7 +89,23 @@ vao - vertex array object, vbo - vertex buffer object       Michael Grieco -- ht
 -- triangle finished                                        Michael Grieco - C++ OpenGL Tutorial - 7 - Displaying Shapes -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=2468
                                                             Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=742
 
+-- drawElement                                              Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=2893
+- EBO element buffer object
+
+
+
 -- kvarternió: komplex számok 4D-ben
 -- duális számok: "komplex számok testvérkéje"              Laszlo Szirmay-Kalos - 0. Számítógépes grafika: Bevezetés -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1971              
 -- baricentrikus koordinátarendszer                         Laszlo Szirmay-Kalos - 0. Számítógépes grafika: Bevezetés -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=2080
 -- Babbage mechanikus számológépe                           https://tig.kgk.uni-obuda.hu/vir/anyag/sztch_tort/Babbage.html
+
+
+
+
+
+
+
+
+
+
+
