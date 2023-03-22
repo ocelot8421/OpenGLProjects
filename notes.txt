@@ -1,26 +1,21 @@
--- How to install OpenGL for C++ (Windows)
-https://www.youtube.com/watch?v=hRInLNR9iRg
+-- How to install OpenGL for C++ (Windows)                          https://www.youtube.com/watch?v=hRInLNR9iRg
     cd bin -- ne felejts el belépni a bin-be
     mingw32-make
     .\main.exe -- ne felejtsd el a szülőmappát is hozzácsapni a path-hoz
 
--- missing separator
+-- missing separator                                                https://www.youtube.com/watch?v=2nM6DBE0blA
 bin> mingw32-make
 Makefile:2: *** missing separator.  Stop.
-Solved: https://www.youtube.com/watch?v=2nM6DBE0blA
-    View/Command Palette --> Convert Indentation  to tabs
+Solved: View/Command Palette --> Convert Indentation  to tabs
 
--- magnitude
-Michael Grieco -- C++ Open GL Tutorial - 2 - Hello, OpenGL
-https://www.youtube.com/watch?v=bQ3CPgw4lxY&list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&index=2
+-- magnitude                                                        Michael Grieco -- https://www.youtube.com/watch?v=bQ3CPgw4lxY&list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&index=2
 magnitude ||u|| = "length"
 
--- Homogeneous Coordinate example
-https://www.tomdalling.com/blog/modern-opengl/explaining-homogenous-coordinates-and-projective-geometry/
+-- Homogeneous Coordinate example                                   https://www.tomdalling.com/blog/modern-opengl/explaining-homogenous-coordinates-and-projective-geometry/
 
--- glViewport(0, 0, 900, 600);
-Hello Window: https://learnopengl.com/Getting-started/Hello-Window
-4.1. 2d képszintézis: Bevezetés: https://www.youtube.com/watch?v=-fX0UT2umIM&list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&index=15
+-- glViewport(0, 0, 900, 600)                                       learnopengl -- https://learnopengl.com/Getting-started/Hello-Window
+2d képszintézis                                                     Laszlo Szirmay-Kalos - 2d képszintézis                      -- https://www.youtube.com/watch?v=-fX0UT2umIM&list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&index=15
+                                                                                         - 0. Számítógépes grafika: Bevezetés   -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1558
 
 -- Translation, Rotation, Scaling matrix
 #include <iostream>
@@ -52,22 +47,47 @@ void printVector (int i, glm::vec4 vector){
 	std::cout << std::endl;
 }
 
--- Vertex shader (Csúcspontárnyaló shader)
-Michael Grieco - C++ OpenGL Tutorial - 7 - Displaying Shapes -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=489
-Laszlo Szirmay-Kalos - 0. Számítógépes grafika: Bevezetés -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=869
-learnopengl.com -- https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=start%20building%20those.-,Vertex%20shader,-The%20vertex%20shader
+ -- Vertex shader (Csúcspontárnyaló shader)                 Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=489
+                                                            Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=869
+                                                            learnopengl.com -- https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=start%20building%20those.-,Vertex%20shader,-The%20vertex%20shader
+-   if(aPos.x < 0.0){                                       
+        color = vec4(1.0, 0.0, 0.0, 1.0);
+    } else if(aPos.x == 0){
+        color = vec4(0.0, 1.0, 0.0, 1.0);
+    } else {
+        color = vec4(0.0, 0.0, 1.0, 1.0);       
+    }
 
--- Fragment shader / Pixel shader
-Michael Grieco - C++ OpenGL Tutorial - 7 - Displaying Shapes -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=569
-Laszlo Szirmay-Kalos - 0. Számítógépes grafika: Bevezetés -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1006
-learnopengl.com -- https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=is%20now%20compiled.-,Fragment%20shader,-The%20fragment%20shader
+-- Fragment shader / Pixel shader                           Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=569
+                                                            Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1006
+                                                            learnopengl.com -- https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=is%20now%20compiled.-,Fragment%20shader,-The%20fragment%20shader
 
--- triangle finished
-Michael Grieco - C++ OpenGL Tutorial - 7 - Displaying Shapes -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=2468
-Laszlo Szirmay-Kalos - 0. Számítógépes grafika: Bevezetés -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=742
+-- CPU init                                                 Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1151
+                                                            Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=1658
+- VAO, VBO
+vao - vertex array object, vbo - vertex buffer object       Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=1544
+- float vtx[] =  = {
+		-0.5f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f
+	};
+. NDC - normalized device coordinates                       Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=1795
+                                                            learnopengl.com -- https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=like%20it%27s%202D.-,Normalized%20Device%20Coordinates%20(NDC),-Once%20your%20vertex
 
--- CPU init
-Laszlo Szirmay-Kalos - 0. Számítógépes grafika: Bevezetés -- 
+- glVertexAttribPointer                                     Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=2008
+                                                            Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1351
 
--- CPU draw
+-- CPU draw                                                 Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1377
+                                                            Michael Grieco -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=2317
 
+--uniform változók
+- MVP: model, view, projection (vertex shader)              Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1412
+- color (fragment shader)
+
+-- triangle finished                                        Michael Grieco - C++ OpenGL Tutorial - 7 - Displaying Shapes -- https://youtu.be/4JAwK4lzrF8?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=2468
+                                                            Laszlo Szirmay-Kalos -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=742
+
+-- kvarternió: komplex számok 4D-ben
+-- duális számok: "komplex számok testvérkéje"              Laszlo Szirmay-Kalos - 0. Számítógépes grafika: Bevezetés -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=1971              
+-- baricentrikus koordinátarendszer                         Laszlo Szirmay-Kalos - 0. Számítógépes grafika: Bevezetés -- https://youtu.be/enFszxj6hfA?list=PLiH4g_VR3i0Pz0vAyjPzPCXDqLqHPfW2p&t=2080
+-- Babbage mechanikus számológépe                           https://tig.kgk.uni-obuda.hu/vir/anyag/sztch_tort/Babbage.html

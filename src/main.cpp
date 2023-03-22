@@ -11,7 +11,7 @@ void processInput(GLFWwindow *window);													//Checks inputs
 std::string loadShaderSrc(const char* filename);
 
 int main() {
-	std::cout << "main starting..." << std::endl;
+	std::cout << "... s t a r t ..." << std::endl;
 
 	int success;															//for exeption handling of vertex shader
 	char infoLog[512];
@@ -38,11 +38,10 @@ int main() {
 		shaders																//TODO understand what it does exactly do.
 	*/																		// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
-	//compile vertex shader
+	//compile vertex shader													//learnopengl.com --  https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=OpenGL%27s%20visible%20region.-,Compiling%20a%20shader,-We%20take%20the
 	 unsigned int vertexShader;
 	 vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	 std::string vertShaderSrc = loadShaderSrc("../assets/vertex_core.glsl");						// ../ because of bin file
-	 std::cout << "vertShaderSrc: " << vertShaderSrc << std::endl; //TODO ---
 	 const GLchar* vertShader = vertShaderSrc.c_str();
 	 glShaderSource(vertexShader, 1, &vertShader, NULL);
 	 glCompileShader(vertexShader);
@@ -57,7 +56,6 @@ int main() {
 	 unsigned int fragmentShader;
 	 fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	 std::string fragShaderSrc = loadShaderSrc("../assets/fragment_core.glsl");						// ../ because of bin file
-	 std::cout << "fragShaderSrc: " << fragShaderSrc << std::endl; //TODO ---
 	 const GLchar* fragShader = fragShaderSrc.c_str();
 	 glShaderSource(fragmentShader, 1, &fragShader, NULL);
 	 glCompileShader(fragmentShader);
@@ -68,7 +66,7 @@ int main() {
 		std::cout << "Error width fragment shader comp.: " << std::endl << infoLog << std::endl;
 	}
 
-	//link
+	//link shader program													learnopengl.com -- https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=here%20as%20well!-,Shader%20program,-A%20shader%20program
 	unsigned int shaderProgram;
 	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
@@ -102,7 +100,7 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	// set attribute pointer
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 
