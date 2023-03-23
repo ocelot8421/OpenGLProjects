@@ -6,6 +6,10 @@
 #include <sstream>
 #include <iostream>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);				//Adjusts the viewport to the window if the user resizes it
 void processInput(GLFWwindow *window);													//Checks inputs
 std::string loadShaderSrc(const char* filename);
@@ -110,32 +114,32 @@ int main() {
 	/* shaders*/															//TODO understand what it does exactly do.
 
 	//vertex array
-	//float vertices[]  = {
-	//	// position
-	//	 0.5f,  0.5f, 0.0f,    	// '. °.	right	top
-	//	-0.5f,  0.5f, 0.0f,		// °. '.	left	top
-	//	-0.5f, -0.5f, 0.0f,		// 'o '.	left	bottom
-	//	 0.5f, -0.5f, 0.0f		// '. 'o	right	bottom
-	//};
-	//unsigned int indices[] = {
-	//	0,1,2,					//first triangle
-	//	2,3,0					//second triangle
-	//};
-
 	float vertices[]  = {
-		// position
-		-0.4f,  0.5f, 0.0f,		// °. '.	left	top
-		-0.5f, -0.5f, 0.0f,		// 'o '.	left	bottom
-		-0.3f, -0.5f, 0.0f,		// '. 'o	right	bottom
-
-		  0.4f,  0.5f, 0.0f,    // '. °.	right	top
-		  0.3f, -0.5f, 0.0f,	// 'o '.	left	bottom
-		  0.5f, -0.5f, 0.0f		// '. 'o	right	bottom
+		// position				//colors
+		 0.5f,  0.5f, 0.0f,    	1.0f, 1.0f, 0.5f,	// '. °.	right	top		
+		-0.5f,  0.5f, 0.0f,		0.5f, 1.0f, 0.7f,	// °. '.	left	top
+		-0.5f, -0.5f, 0.0f,		0.6f, 1.0f, 0.2f,	// 'o '.	left	bottom
+		 0.5f, -0.5f, 0.0f,		1.0f, 0.2f,	1.0f	// '. 'o	right	bottom
 	};
 	unsigned int indices[] = {
 		0,1,2,					//first triangle
-		3,4,5					//second triangle
+		2,3,0					//second triangle
 	};
+
+	//float vertices[]  = {
+	//	// position
+	//	-0.4f,  0.5f, 0.0f,		// °. '.	left	top
+	//	-0.5f, -0.5f, 0.0f,		// 'o '.	left	bottom
+	//	-0.3f, -0.5f, 0.0f,		// '. 'o	right	bottom
+
+	//	  0.4f,  0.5f, 0.0f,    // '. °.	right	top
+	//	  0.3f, -0.5f, 0.0f,	// 'o '.	left	bottom
+	//	  0.5f, -0.5f, 0.0f		// '. 'o	right	bottom
+	//};
+	//unsigned int indices[] = {
+	//	0,1,2,					//first triangle
+	//	3,4,5					//second triangle
+	//};
 
 	// VAO, VBO
 	unsigned int VAO, VBO, EBO;
@@ -147,18 +151,37 @@ int main() {
 	//bind VBO
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
 	// set attribute pointer
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	
+	//position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	//color
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
 	//set up EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    while (!glfwWindowShouldClose(window)) {								//RENDER LOOP (double buffer)
+	glm::mat4 trans = glm::mat4(1.0f);
+	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	glUseProgram(shaderPrograms[0]);
+	glUniformMatrix4fv(glGetUniformLocation(shaderPrograms[0], "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+
+
+    while (!glfwWindowShouldClose(window)) {	
+									//RENDER LOOP (double buffer)
 		processInput(window);												// takes the window as input together with a key
-		//RENDERING COMMANDS
+		
+		//rendering
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+		trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 25.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(glGetUniformLocation(shaderPrograms[0], "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+
 
 		// draw shapes
 		glBindVertexArray(VAO);
@@ -169,10 +192,11 @@ int main() {
 
 		//first triangle
 		glUseProgram(shaderPrograms[0]);
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);				
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);				
 		//second triangle
-		glUseProgram(shaderPrograms[1]);
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));				
+		//glUseProgram(shaderPrograms[1]);
+		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));				
+		glBindVertexArray(0);
 
         glfwSwapBuffers(window);											//Swaps buffer that contains color values for each pixel in GLFW's window
         glfwPollEvents();													//checks keyboard input or mouse movement events, updates the window state, and calls the corresponding functions
