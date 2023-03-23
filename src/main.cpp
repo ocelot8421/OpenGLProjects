@@ -53,48 +53,89 @@ int main() {
 	}
 	
 	//compile fragment shader
-	 unsigned int fragmentShader;
-	 fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	 unsigned int fragmentShaders[2];
+
+	fragmentShaders[0] = glCreateShader(GL_FRAGMENT_SHADER);
 	 std::string fragShaderSrc = loadShaderSrc("../assets/fragment_core.glsl");						// ../ because of bin file
 	 const GLchar* fragShader = fragShaderSrc.c_str();
-	 glShaderSource(fragmentShader, 1, &fragShader, NULL);
-	 glCompileShader(fragmentShader);
+	 glShaderSource(fragmentShaders[0], 1, &fragShader, NULL);
+	 glCompileShader(fragmentShaders[0]);
 	 //catch errors
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+	glGetShaderiv(fragmentShaders[0], GL_COMPILE_STATUS, &success);
 	if (!success){
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+		glGetShaderInfoLog(fragmentShaders[0], 512, NULL, infoLog);
+		std::cout << "Error width fragment shader comp.: " << std::endl << infoLog << std::endl;
+	}
+
+	fragmentShaders[1] = glCreateShader(GL_FRAGMENT_SHADER);
+	 fragShaderSrc = loadShaderSrc("../assets/fragment_core2.glsl");						// ../ because of bin file
+	 fragShader = fragShaderSrc.c_str();
+	 glShaderSource(fragmentShaders[1], 1, &fragShader, NULL);
+	 glCompileShader(fragmentShaders[1]);
+	 //catch errors
+	glGetShaderiv(fragmentShaders[1], GL_COMPILE_STATUS, &success);
+	if (!success){
+		glGetShaderInfoLog(fragmentShaders[1], 512, NULL, infoLog);
 		std::cout << "Error width fragment shader comp.: " << std::endl << infoLog << std::endl;
 	}
 
 	//link shader program													learnopengl.com -- https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=here%20as%20well!-,Shader%20program,-A%20shader%20program
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader); 
-	glLinkProgram(shaderProgram);
+	unsigned int shaderPrograms[0];
+
+	shaderPrograms[0] = glCreateProgram();
+	glAttachShader(shaderPrograms[0], vertexShader);
+	glAttachShader(shaderPrograms[0], fragmentShaders[0]); 
+	glLinkProgram(shaderPrograms[0]);
 	 //catch errors
-	glGetShaderiv(shaderProgram, GL_COMPILE_STATUS, &success);
+	glGetShaderiv(shaderPrograms[0], GL_COMPILE_STATUS, &success);
 	if (!success){
-		glGetShaderInfoLog(shaderProgram, 512, NULL, infoLog);
+		glGetShaderInfoLog(shaderPrograms[0], 512, NULL, infoLog);
+		std::cout << "Linking error: " << std::endl << infoLog << std::endl;
+	}
+
+	shaderPrograms[1] = glCreateProgram();
+	glAttachShader(shaderPrograms[1], vertexShader);
+	glAttachShader(shaderPrograms[1], fragmentShaders[1]); 
+	glLinkProgram(shaderPrograms[1]);
+	 //catch errors
+	glGetShaderiv(shaderPrograms[1], GL_COMPILE_STATUS, &success);
+	if (!success){
+		glGetShaderInfoLog(shaderPrograms[1], 512, NULL, infoLog);
 		std::cout << "Linking error: " << std::endl << infoLog << std::endl;
 	}
 
 	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);											// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+	glDeleteShader(fragmentShaders[0]);											
+	glDeleteShader(fragmentShaders[1]);											// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 	/* shaders*/															//TODO understand what it does exactly do.
 
 	//vertex array
+	//float vertices[]  = {
+	//	// position
+	//	 0.5f,  0.5f, 0.0f,    	// '. °.	right	top
+	//	-0.5f,  0.5f, 0.0f,		// °. '.	left	top
+	//	-0.5f, -0.5f, 0.0f,		// 'o '.	left	bottom
+	//	 0.5f, -0.5f, 0.0f		// '. 'o	right	bottom
+	//};
+	//unsigned int indices[] = {
+	//	0,1,2,					//first triangle
+	//	2,3,0					//second triangle
+	//};
+
 	float vertices[]  = {
-		0.5f, 0.5f, 0.0f,    	// '. °.	right	top
-		-0.5f, 0.5f, 0.0f,		// °. '.	left	top
+		// position
+		-0.4f,  0.5f, 0.0f,		// °. '.	left	top
 		-0.5f, -0.5f, 0.0f,		// 'o '.	left	bottom
-		0.5f, -0.5f, 0.0f		// '. 'o	right	bottom
+		-0.3f, -0.5f, 0.0f,		// '. 'o	right	bottom
+
+		  0.4f,  0.5f, 0.0f,    // '. °.	right	top
+		  0.3f, -0.5f, 0.0f,	// 'o '.	left	bottom
+		  0.5f, -0.5f, 0.0f		// '. 'o	right	bottom
 	};
 	unsigned int indices[] = {
 		0,1,2,					//first triangle
-		2,3,0					//second triangle
+		3,4,5					//second triangle
 	};
-
 
 	// VAO, VBO
 	unsigned int VAO, VBO, EBO;
@@ -116,15 +157,22 @@ int main() {
     while (!glfwWindowShouldClose(window)) {								//RENDER LOOP (double buffer)
 		processInput(window);												// takes the window as input together with a key
 		//RENDERING COMMANDS
-		glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
+		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
 		// draw shapes
 		glBindVertexArray(VAO);
-		glUseProgram(shaderProgram);
+		//glUseProgram(shaderPrograms[0]);
 		//glDrawArrays(GL_TRIANGLES, 0, 3);									//triangle (3 points)
 		//glDrawArrays(GL_TRIANGLES, 0, 6);									//rectangle (2 triangle, 6 points)
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);				//rectangle element
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);				//rectangle element
+
+		//first triangle
+		glUseProgram(shaderPrograms[0]);
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);				
+		//second triangle
+		glUseProgram(shaderPrograms[1]);
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));				
 
         glfwSwapBuffers(window);											//Swaps buffer that contains color values for each pixel in GLFW's window
         glfwPollEvents();													//checks keyboard input or mouse movement events, updates the window state, and calls the corresponding functions
