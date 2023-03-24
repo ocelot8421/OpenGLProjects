@@ -10,9 +10,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Shader.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);				//Adjusts the viewport to the window if the user resizes it
 void processInput(GLFWwindow *window);													//Checks inputs
-std::string loadShaderSrc(const char* filename);
 
 int main() {
 	std::cout << "... s t a r t ..." << std::endl;
@@ -38,9 +39,9 @@ int main() {
 	glViewport(0, 0, 900, 600);												//rendering window with its dimensions (lower left corner's coordinates, width, height)
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);		//Adjusts the viewport to the window if the user resizes it
 
+	Shader shader("../assets/vertex_core.glsl", "../assets/fragment_core.glsl");	// ../ because of bin file
 	/*
-		shaders																//TODO understand what it does exactly do.
-	*/																		// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+		shaders																//TODO understand what it does exactly do.																		// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
 	//compile vertex shader													//learnopengl.com --  https://learnopengl.com/Getting-started/Hello-Triangle#:~:text=OpenGL%27s%20visible%20region.-,Compiling%20a%20shader,-We%20take%20the
 	 unsigned int vertexShader;
@@ -111,7 +112,7 @@ int main() {
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShaders[0]);											
 	glDeleteShader(fragmentShaders[1]);											// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-	/* shaders*/															//TODO understand what it does exactly do.
+	shaders*/															//TODO understand what it does exactly do.
 
 	//vertex array
 	float vertices[]  = {
@@ -167,8 +168,10 @@ int main() {
 
 	glm::mat4 trans = glm::mat4(1.0f);
 	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	glUseProgram(shaderPrograms[0]);
-	glUniformMatrix4fv(glGetUniformLocation(shaderPrograms[0], "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+	shader.activate();
+	shader.setMat4("transform", trans);
+	//glUseProgram(shaderPrograms[0]);
+	//glUniformMatrix4fv(glGetUniformLocation(shaderPrograms[0], "transform"), 1, GL_FALSE, glm::value_ptr(trans));
 
 
     while (!glfwWindowShouldClose(window)) {	
@@ -180,8 +183,9 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
 		trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 25.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(glGetUniformLocation(shaderPrograms[0], "transform"), 1, GL_FALSE, glm::value_ptr(trans));
-
+		//glUniformMatrix4fv(glGetUniformLocation(shaderPrograms[0], "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+		shader.activate();
+		shader.setMat4("transform", trans);
 
 		// draw shapes
 		glBindVertexArray(VAO);
@@ -191,7 +195,7 @@ int main() {
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);				//rectangle element
 
 		//first triangle
-		glUseProgram(shaderPrograms[0]);
+		//glUseProgram(shaderPrograms[0]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);				
 		//second triangle
 		//glUseProgram(shaderPrograms[1]);
@@ -219,20 +223,3 @@ void processInput(GLFWwindow *window) {										// takes the window as input to
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
-
-std::string loadShaderSrc(const char* filename){
-	std::ifstream file;
-	std::stringstream buf;
-	std::string ret = "";
-	file.open(filename);													// learnopengl.com -- https://learnopengl.com/Getting-started/Shaders#:~:text=set%20its%20value.-,Reading%20from%20file,-We%27re%20using%20C
-	if(file.is_open()) {
-		buf << file.rdbuf();
-		ret = buf.str();
-	} else {
-		std::cout << "Could not open " << filename << std::endl;
-	}
-	file.close(); 
-	return ret;
-}
-
-
