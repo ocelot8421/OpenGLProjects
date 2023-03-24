@@ -40,6 +40,7 @@ int main() {
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);		
 
 	Shader shader("../assets/vertex_core.glsl", "../assets/fragment_core.glsl");
+	Shader shader2("../assets/vertex_core.glsl", "../assets/fragment_core2.glsl");
 	
 	//vertex array
 	float vertices[]  = {
@@ -97,6 +98,8 @@ int main() {
 	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	shader.activate();
 	shader.setMat4("transform", trans);
+	shader2.activate();
+	shader2.setMat4("transform", trans);
 
     while (!glfwWindowShouldClose(window)) {	
 		processInput(window);												
@@ -108,10 +111,17 @@ int main() {
 		trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 25.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		shader.activate();
 		shader.setMat4("transform", trans);
+		shader2.activate();
+		shader2.setMat4("transform", trans);
 
 		// draw shapes
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);				
+		shader.activate();
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		shader2.activate();
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(GLuint)));
+
+
 		glBindVertexArray(0);
 
         glfwSwapBuffers(window);											
