@@ -98,6 +98,10 @@ int main() {
 	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	shader.activate();
 	shader.setMat4("transform", trans);
+
+	glm::mat4 trans2 = glm::mat4(1.0f);
+	trans2 = glm::scale(trans2, glm::vec3(0.6f));
+	trans2 = glm::rotate(trans2, glm::radians(15.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	shader2.activate();
 	shader2.setMat4("transform", trans);
 
@@ -111,13 +115,18 @@ int main() {
 		trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 25.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		shader.activate();
 		shader.setMat4("transform", trans);
-		shader2.activate();
-		shader2.setMat4("transform", trans);
+		//shader2.activate();
+		//shader2.setMat4("transform", trans);
 
 		// draw shapes
 		glBindVertexArray(VAO);
 		shader.activate();
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+
+		trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		shader2.activate();
+		shader2.setMat4("transform", trans2);
+
 		shader2.activate();
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(GLuint)));
 
