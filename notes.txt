@@ -1,3 +1,6 @@
+itt járok:
+
+
 -- How to install OpenGL for C++ (Windows)                          https://www.youtube.com/watch?v=hRInLNR9iRg
     cd bin -- ne felejts el belépni a bin-be
     mingw32-make
@@ -101,11 +104,9 @@ vao - vertex array object, vbo - vertex buffer object       Michael Grieco -- ht
 -- Babbage mechanikus számológépe                           https://tig.kgk.uni-obuda.hu/vir/anyag/sztch_tort/Babbage.html
 
 
-
-
-
-
-
+# GLAD  = openGl LoAder Generator       library that generates and manages the function pointers for OpenGL
+# GLFW  = Graphics Library FrameWork    cross-platform, open-source library for creating windows, contexts, and receiving input in OpenGL, Vulkan, and other graphics API applications
+# GLM   = openGL Mathematics
 
 
 
