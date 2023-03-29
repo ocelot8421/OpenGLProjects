@@ -19,8 +19,6 @@ void processInput(GLFWwindow *window);
 int main() {
 	std::cout << "... s t a r t ..." << std::endl;
 
-	int success;															
-	char infoLog[512];
 	//  initialize, then configure Graphics Library FrameWork
     glfwInit();
 	if (!glfwInit())
@@ -51,37 +49,22 @@ int main() {
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); //TODO (2) How can this work without call by parameters?
 
 	Shader shader("../assets/vertex_core.glsl", "../assets/fragment_core.glsl");
-	Shader shader2("../assets/vertex_core.glsl", "../assets/fragment_core2.glsl");
+	//Shader shader2("../assets/vertex_core.glsl", "../assets/fragment_core2.glsl");
 	
 	//vertex array
 	float vertices[]  = {
 		// position				//colors			//texture coordinates
-		 0.5f,  0.5f, 0.0f,    	1.0f, 1.0f, 0.5f,	0.0f, 0.0f,		// '. °.	right	top		
-		-0.5f,  0.5f, 0.0f,		0.5f, 1.0f, 0.7f,	0.0f, 1.0f,		// °. '.	left	top
-		-0.5f, -0.5f, 0.0f,		0.6f, 1.0f, 0.2f,	1.0f, 0.0f,		// 'o '.	left	bottom
-		 0.5f, -0.5f, 0.0f,		1.0f, 0.2f,	1.0f,	1.0f, 1.0f		// '. 'o	right	bottom
+		 0.5f,  0.5f, 0.0f,    	1.0f, 1.0f, 0.5f,	1.0f, 1.0f,		// '. °.	right	top		
+		 0.5f, -0.5f, 0.0f,		1.0f, 0.2f,	1.0f,	1.0f, 0.0f,		// '. 'o	right	bottom
+		-0.5f, -0.5f, 0.0f,		0.6f, 1.0f, 0.2f,	0.0f, 0.0f,		// 'o '.	left	bottom
+		-0.5f,  0.5f, 0.0f,		0.5f, 1.0f, 0.7f,	0.0f, 1.0f		// °. '.	left	top
 	};
 	unsigned int indices[] = {
-		0,1,2,					//first triangle
-		2,3,0					//second triangle
+		0,2,1,					//first triangle
+		0,2,3					//second triangle
 	};
 
-	//float vertices[]  = {
-	//	// position
-	//	-0.4f,  0.5f, 0.0f,		// °. '.	left	top
-	//	-0.5f, -0.5f, 0.0f,		// 'o '.	left	bottom
-	//	-0.3f, -0.5f, 0.0f,		// '. 'o	right	bottom
-
-	//	  0.4f,  0.5f, 0.0f,    // '. °.	right	top
-	//	  0.3f, -0.5f, 0.0f,	// 'o '.	left	bottom
-	//	  0.5f, -0.5f, 0.0f		// '. 'o	right	bottom
-	//};
-	//unsigned int indices[] = {
-	//	0,1,2,					//first triangle
-	//	3,4,5					//second triangle
-	//};
-
-	// VAO, VBO
+	// VAO, VBO, EBO
 	unsigned int VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -119,34 +102,49 @@ int main() {
 
 	// load image
 	int width, height, nChannels;
-	unsigned char* data = stbi_load("../assets/pic1_kek.jpg", &width, &height, &nChannels, 0);
-
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* data = stbi_load("../assets/gekko_meretezett.jpg", &width, &height, &nChannels, 0);
 	if(data){
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	} else {
-		std::cout << "Failed to load texture." << std::endl;
+		std::cout << "Failed to load texture1." << std::endl;
 	}
 	stbi_image_free(data);
 
-	shader.activate();
-	shader.setInt("texture1", 0);
+	//texture2
+	unsigned int texture2;
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	data = stbi_load("../assets/smile.png", &width, &height, &nChannels, 0);
+	if(data){
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	} else {
+		std::cout << "Failed to load texture2." << std::endl;
+	}
+	stbi_image_free(data);
 
+
+	shader.activate();				// glUseProgram(id);
+	shader.setInt("texture1", 0);
+	shader.setInt("texture2", 1);
+	
 
 	//set up EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glm::mat4 trans = glm::mat4(1.0f);
-	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	shader.activate();
-	shader.setMat4("transform", trans);
+	//glm::mat4 trans = glm::mat4(1.0f);
+	//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//shader.activate();
+	//shader.setMat4("transform", trans);
 
-	glm::mat4 trans2 = glm::mat4(1.0f);
-	trans2 = glm::scale(trans2, glm::vec3(0.6f));
-	trans2 = glm::rotate(trans2, glm::radians(15.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	shader2.activate();
-	shader2.setMat4("transform", trans);
+	//glm::mat4 trans2 = glm::mat4(1.0f);
+	//trans2 = glm::scale(trans2, glm::vec3(0.6f));
+	//trans2 = glm::rotate(trans2, glm::radians(15.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//shader2.activate();
+	//shader2.setMat4("transform", trans);
 
     while (!glfwWindowShouldClose(window)) {	
 		processInput(window);												
@@ -155,26 +153,30 @@ int main() {
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+		//texture1
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
+		//texture
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 
-		trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 25.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		shader.activate();
-		shader.setMat4("transform", trans);
+		//trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 25.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		//shader.activate();
+		//shader.setMat4("transform", trans);
 		//shader2.activate();
 		//shader2.setMat4("transform", trans);
 
 		// draw shapes
 		glBindVertexArray(VAO);
 		shader.activate();
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		shader2.activate();
-		shader2.setMat4("transform", trans2);
+		//trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		//shader2.activate();
+		//shader2.setMat4("transform", trans2);
 
-		shader2.activate();
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(GLuint)));
+		//shader2.activate();
+		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(GLuint)));
 
 
 		glBindVertexArray(0);

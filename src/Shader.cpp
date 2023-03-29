@@ -12,9 +12,9 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath){
     glAttachShader(id, fragShader);
     glLinkProgram(id);
 
-    glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+    glGetProgramiv(id, GL_COMPILE_STATUS, &success);
 	if (!success){
-		glGetShaderInfoLog(id, 512, NULL, infoLog);
+		glGetProgramInfoLog(id, 512, NULL, infoLog);
 		std::cout << "Linking error: " << std::endl << infoLog << std::endl;
     }
     glDeleteShader(vertexShader);
@@ -45,15 +45,19 @@ GLuint Shader::compileShader(const char* filepath, GLenum type){
     char infoLog[512];
 
     GLuint ret = glCreateShader(type);
+
     std::string shaderSrc = loadShaderSrc(filepath);
     const GLchar* shader = shaderSrc.c_str();
+
     glShaderSource(ret, 1, &shader, NULL);
     glCompileShader(ret);
 
     glGetShaderiv(ret, GL_COMPILE_STATUS, &success);
 	if (!success){
 		glGetShaderInfoLog(ret, 512, NULL, infoLog);
-		std::cout << "Linking error: " << std::endl << infoLog << std::endl;
+		std::cout << "compileShader failed: " << std::endl <<
+                        filepath << std::endl <<
+                        infoLog << std::endl;
     }
 
     return ret;
