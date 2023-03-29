@@ -14,7 +14,9 @@
 #include "Shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);				
-void processInput(GLFWwindow *window);													
+void processInput(GLFWwindow *window);
+
+float mixVal = 0.5f;
 
 int main() {
 	std::cout << "... s t a r t ..." << std::endl;
@@ -160,15 +162,12 @@ int main() {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
-		//trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 25.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		//shader.activate();
-		//shader.setMat4("transform", trans);
-		//shader2.activate();
-		//shader2.setMat4("transform", trans);
-
 		// draw shapes
 		glBindVertexArray(VAO);
 		shader.activate();
+
+		shader.setFloat("mixVal",mixVal);
+
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		//trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -198,6 +197,22 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height){
 }
 
 void processInput(GLFWwindow *window) {										
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(window, true);
+	}
+	// change mixVal
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		mixVal += .05f;
+		if (mixVal > 1){
+			mixVal = 1.0f;
+		}
+	}	
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		mixVal -= .05f;
+		if (mixVal < 0){
+			mixVal = 0.0f;
+		}
+	}	
 }
