@@ -70,23 +70,62 @@ int main() {
 	Shader shader("../assets/vertex_core.glsl", "../assets/fragment_core.glsl");
 	
 	//vertex array
-	float vertices[]  = {
-		// position				//colors			//texture coordinates
-		 0.5f,  0.5f, 0.0f,    	1.0f, 1.0f, 0.5f,	1.0f, 1.0f,		// '. °.	right	top		
-		 0.5f, -0.5f, 0.0f,		1.0f, 0.2f,	1.0f,	1.0f, 0.0f,		// '. 'o	right	bottom
-		-0.5f, -0.5f, 0.0f,		0.6f, 1.0f, 0.2f,	0.0f, 0.0f,		// 'o '.	left	bottom
-		-0.5f,  0.5f, 0.0f,		0.5f, 1.0f, 0.7f,	0.0f, 1.0f		// °. '.	left	top
-	};
-	unsigned int indices[] = {
-		0,2,1,					//first triangle
-		0,2,3					//second triangle
-	};
+	float vertices[] = {
+		//position			  //texturecoordinates
 
-	// VAO, VBO, EBO
-	unsigned int VAO, VBO, EBO;
-	glGenVertexArrays(1, &VAO);
+		// back
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+		//front
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		//left
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		//right
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		//bottom
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+		//up
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
+
+	// VAO, VBO
+	unsigned int VAO, VBO;
 	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	glGenVertexArrays(1, &VAO);
 	//bind VAO
 	glBindVertexArray(VAO);
 	//bind VBO
@@ -95,14 +134,11 @@ int main() {
 
 	// SET VERTEX ATTRIBUTES
 	//position
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	//color
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
 	//texture coordinate
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	// TEXTURES
 
@@ -147,15 +183,12 @@ int main() {
 	shader.setInt("texture1", 0);
 	shader.setInt("texture2", 1);
 	
-
-	//set up EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	//glm::mat4 trans = glm::mat4(1.0f);
-	//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	//shader.activate();
-	//shader.setMat4("transform", trans);
+	// transformation
+	glm::mat4 trans = glm::mat4(1.0f);
+	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//trans = glm::scale(trans, glm::vec3(0.6f));
+	shader.activate();
+	shader.setMat4("transform", trans);
 
 	//glm::mat4 trans2 = glm::mat4(1.0f);
 	//trans2 = glm::scale(trans2, glm::vec3(0.6f));
@@ -189,15 +222,15 @@ int main() {
 		glBindVertexArray(VAO);
 		shader.activate();
 
+		//shader.setMat4("transform", transform);
 		shader.setFloat("mixVal", mixVal);
-		shader.setMat4("transform", transform);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		//trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		//shader2.activate();
 		//shader2.setMat4("transform", trans2);
-
 		//shader2.activate();
 		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(GLuint)));
 
@@ -209,8 +242,7 @@ int main() {
     }
 
 	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VAO);
-	glDeleteBuffers(1, &EBO);
+	glDeleteBuffers(1, &VBO);
 
 	std::cout << "... e n d ..." << std::endl;
 
