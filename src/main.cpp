@@ -13,10 +13,17 @@
 
 #include "Shader.h"
 
+#include "io/joystick.h"
+#include "io/keyboard.h"
+#include "io/mouse.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);				
 void processInput(GLFWwindow *window);
 
 float mixVal = 0.5f;
+
+glm::mat4 transform = glm::mat4(1.0f);
+Joystick mainJ(0);
 
 int main() {
 	std::cout << "... s t a r t ..." << std::endl;
@@ -47,11 +54,20 @@ int main() {
     }
 
 	//viewport
-	glViewport(0, 0, 640, 480);												
+	glViewport(0, 0, 640, 480);
+
+	// callback											
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); //TODO (2) How can this work without call by parameters?
 
+	glfwSetKeyCallback(window, Keyboard::keyCallback);
+
+	glfwSetCursorPosCallback(window, Mouse::cursorPosCallback);
+	glfwSetMouseButtonCallback(window, Mouse::mouseButtonCallback);
+	glfwSetScrollCallback(window, Mouse::mouseWheelCallback);
+	
+
+	// SHADERS=============================
 	Shader shader("../assets/vertex_core.glsl", "../assets/fragment_core.glsl");
-	//Shader shader2("../assets/vertex_core.glsl", "../assets/fragment_core2.glsl");
 	
 	//vertex array
 	float vertices[]  = {
@@ -127,8 +143,7 @@ int main() {
 	}
 	stbi_image_free(data);
 
-
-	shader.activate();				// glUseProgram(id);
+	shader.activate();
 	shader.setInt("texture1", 0);
 	shader.setInt("texture2", 1);
 	
@@ -148,6 +163,14 @@ int main() {
 	//shader2.activate();
 	//shader2.setMat4("transform", trans);
 
+	mainJ.update();
+	if (mainJ.isPresent()) {
+		std::cout << mainJ.getName() << "is present." << std::endl;
+	} else {
+		std::cout << " Joystick is not present." << std::endl;
+	}
+	
+
     while (!glfwWindowShouldClose(window)) {	
 		processInput(window);												
 		
@@ -166,7 +189,8 @@ int main() {
 		glBindVertexArray(VAO);
 		shader.activate();
 
-		shader.setFloat("mixVal",mixVal);
+		shader.setFloat("mixVal", mixVal);
+		shader.setMat4("transform", transform);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -188,6 +212,9 @@ int main() {
 	glDeleteBuffers(1, &VAO);
 	glDeleteBuffers(1, &EBO);
 
+	std::cout << "... e n d ..." << std::endl;
+
+
     glfwTerminate();	//destroys any remaining windows and releases any other resources allocated by GLFW													
     return 0;
 }
@@ -197,22 +224,41 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height){
 }
 
 void processInput(GLFWwindow *window) {										
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+    if(Keyboard::key(GLFW_KEY_ESCAPE)){		//if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(window, true);
 	}
 	// change mixVal
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	if (Keyboard::key(GLFW_KEY_UP))	//if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 	{
 		mixVal += .05f;
 		if (mixVal > 1){
 			mixVal = 1.0f;
 		}
 	}	
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	if (Keyboard::key(GLFW_KEY_DOWN))	//if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 	{
 		mixVal -= .05f;
 		if (mixVal < 0){
 			mixVal = 0.0f;
 		}
-	}	
+	}
+
+	if (Keyboard::key(GLFW_KEY_W)) {
+		transform = glm::translate(transform, glm::vec3(0.0f, 0.1f, 0.0f));
+	}
+	if (Keyboard::key(GLFW_KEY_S)) {
+		transform = glm::translate(transform, glm::vec3(0.0f, -0.1f, 0.0f));
+	}
+	if (Keyboard::key(GLFW_KEY_A)) {
+		transform = glm::translate(transform, glm::vec3(-0.1f, 0.1f, 0.0f));
+	}
+	if (Keyboard::key(GLFW_KEY_D)) {
+		transform = glm::translate(transform, glm::vec3(0.1f, 0.0f, 0.0f));
+	}
+
+	//Joystick -- next time //TODO (0) 
+
+	mainJ.update();	
 }
+
+
