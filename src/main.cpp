@@ -198,7 +198,7 @@ int main() {
 	
 	x = 0.0f;
 	y = 0.0f,
-	z = 0.0f;
+	z = 3.0f;
 
     while (!glfwWindowShouldClose(window)) {	
 		processInput(window);												
@@ -223,14 +223,14 @@ int main() {
 		glm::mat4 projection =glm::mat4(1.0f);
 
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f)); //why 0.5 instead of 1.0? -- https://learnopengl.com/Getting-started/Transformations#:~:text=%2C%200.0%2C-,1.0,-))%3B%0Atrans%20%3D%20glm
-		view = glm::translate(view, glm::vec3(x, y, z));
+		view = glm::translate(view, glm::vec3(-x, -y, -z));
 		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		shader.activate();
 
-		shader.setMat4("model", model);	
+		shader.setMat4("model", model);
 		shader.setMat4("view", view);	
-		shader.setMat4("projection", projection);	
+		shader.setMat4("projection", projection);
 		shader.setFloat("mixVal", mixVal);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
