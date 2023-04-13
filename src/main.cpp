@@ -23,7 +23,11 @@ void processInput(GLFWwindow *window);
 float mixVal = 0.5f;
 
 glm::mat4 transform = glm::mat4(1.0f);
+
 Joystick mainJ(0);
+
+unsigned int SCR_WIDTH = 800, SCR_HEIGHT = 600;
+float x, y, z;
 
 int main() {
 	std::cout << "... s t a r t ..." << std::endl;
@@ -39,7 +43,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	//  Creating a window and context
-    GLFWwindow* window = glfwCreateWindow(640, 480, "First steps in Neuroimaging", NULL, NULL);	
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "First steps in Neuroimaging", NULL, NULL);	
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -54,7 +58,7 @@ int main() {
     }
 
 	//viewport
-	glViewport(0, 0, 640, 480);
+	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
 	// callback											
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); //TODO (2) How can this work without call by parameters?
@@ -65,6 +69,8 @@ int main() {
 	glfwSetMouseButtonCallback(window, Mouse::mouseButtonCallback);
 	glfwSetScrollCallback(window, Mouse::mouseWheelCallback);
 	
+	// depth test, alias z-buffer
+	glEnable(GL_DEPTH_TEST);
 
 	// SHADERS=============================
 	Shader shader("../assets/vertex_core.glsl", "../assets/fragment_core.glsl");
@@ -185,16 +191,10 @@ int main() {
 	
 	// transformation
 	glm::mat4 trans = glm::mat4(1.0f);
-	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	//trans = glm::scale(trans, glm::vec3(0.6f));
+	trans = glm::rotate(trans, glm::radians(15.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	trans = glm::rotate(trans, glm::radians(15.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	shader.activate();
 	shader.setMat4("transform", trans);
-
-	//glm::mat4 trans2 = glm::mat4(1.0f);
-	//trans2 = glm::scale(trans2, glm::vec3(0.6f));
-	//trans2 = glm::rotate(trans2, glm::radians(15.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	//shader2.activate();
-	//shader2.setMat4("transform", trans);
 
 	mainJ.update();
 	if (mainJ.isPresent()) {
@@ -207,9 +207,9 @@ int main() {
     while (!glfwWindowShouldClose(window)) {	
 		processInput(window);												
 		
-		//rendering
+		//render
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//texture1
 		glActiveTexture(GL_TEXTURE0);
@@ -247,27 +247,29 @@ int main() {
 	std::cout << "... e n d ..." << std::endl;
 
 
-    glfwTerminate();	//destroys any remaining windows and releases any other resources allocated by GLFW													
+    glfwTerminate();												
     return 0;
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height){	
     glViewport(0, 0, width, height);
+	SCR_WIDTH = width;
+	SCR_HEIGHT = height;
 }
 
 void processInput(GLFWwindow *window) {										
-    if(Keyboard::key(GLFW_KEY_ESCAPE)){		//if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+    if(Keyboard::key(GLFW_KEY_ESCAPE)){
         glfwSetWindowShouldClose(window, true);
 	}
 	// change mixVal
-	if (Keyboard::key(GLFW_KEY_UP))	//if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	if (Keyboard::key(GLFW_KEY_UP))
 	{
 		mixVal += .05f;
 		if (mixVal > 1){
 			mixVal = 1.0f;
 		}
 	}	
-	if (Keyboard::key(GLFW_KEY_DOWN))	//if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	if (Keyboard::key(GLFW_KEY_DOWN))
 	{
 		mixVal -= .05f;
 		if (mixVal < 0){
