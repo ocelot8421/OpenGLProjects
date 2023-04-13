@@ -196,9 +196,24 @@ int main() {
 		std::cout << " Joystick is not present." << std::endl;
 	}
 	
+	// camera position
 	x = 0.0f;
 	y = 0.0f,
-	z = 3.0f;
+	z = 6.0f;
+
+	// -- coordinates for more cubes
+	glm::vec3 cubePositions[] = {
+		glm::vec3( 0.0f,  0.0f,  0.0f), 
+		glm::vec3( 2.0f,  5.0f, -15.0f), 
+		glm::vec3(-1.5f, -2.2f, -2.5f),  
+		glm::vec3(-3.8f, -2.0f, -12.3f),  
+		glm::vec3( 2.4f, -0.4f, -3.5f),  
+		glm::vec3(-1.7f,  3.0f, -7.5f),  
+		glm::vec3( 1.3f, -2.0f, -2.5f),  
+		glm::vec3( 1.5f,  2.0f, -2.5f), 
+		glm::vec3( 1.5f,  0.2f, -1.5f), 
+		glm::vec3(-1.3f,  1.0f, -1.5f)  
+	};
 
     while (!glfwWindowShouldClose(window)) {	
 		processInput(window);												
@@ -206,6 +221,7 @@ int main() {
 		//render
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
 		//texture1
 		glActiveTexture(GL_TEXTURE0);
@@ -218,22 +234,38 @@ int main() {
 		glBindVertexArray(VAO);
 
 		// create transformation for screen
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view =glm::mat4(1.0f);
+		//glm::mat4 model = glm::mat4(1.0f); // ---
+		glm::mat4 view =glm::mat4(1.0f); // ---
 		glm::mat4 projection =glm::mat4(1.0f);
 
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f)); //why 0.5 instead of 1.0? -- https://learnopengl.com/Getting-started/Transformations#:~:text=%2C%200.0%2C-,1.0,-))%3B%0Atrans%20%3D%20glm
-		view = glm::translate(view, glm::vec3(-x, -y, -z));
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f)); // ---
+		view = glm::translate(view, glm::vec3(-x, -y, -z)); // ---
+		projection = glm::perspective(glm::radians(90.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		shader.activate();
 
-		shader.setMat4("model", model);
-		shader.setMat4("view", view);	
+		//shader.setMat4("model", model); // ---
+		shader.setMat4("view", view);	 // ---
 		shader.setMat4("projection", projection);
 		shader.setFloat("mixVal", mixVal);
 
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		// -- rendering more cubes
+		//glDrawArrays(GL_TRIANGLES, 0, 36); // ---
+		for(unsigned int i = 0; i < 10; i++)
+		{
+  			glm::mat4 model = glm::mat4(1.0f);
+			//glm::mat4 view =glm::mat4(1.0f); // ---
+			model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-30.0f * i), glm::vec3(0.0f, 0.2f, 0.1f));	 // ---
+			model = glm::translate(model, cubePositions[i]);
+			model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.1f));	 // ---
+			//view = glm::translate(view, glm::vec3(-x, -y, -z)); // ---
+
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.setMat4("model", model);
+			//shader.setMat4("view", view); // ---
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		glBindVertexArray(0);
 
