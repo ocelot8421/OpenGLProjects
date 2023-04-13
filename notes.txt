@@ -1,4 +1,6 @@
 itt járok:
+https://youtu.be/3lxPBEHPA9Y?list=PLysLvOneEETPlOI_PI4mJnocqIpr2cSHS&t=2394
+https://learnopengl.com/Getting-started/Camera#:~:text=and%20pitch%20values%3F-,Mouse%20input,-The%20yaw%20and
 
 
 -- How to install OpenGL for C++ (Windows)                          https://www.youtube.com/watch?v=hRInLNR9iRg
