@@ -188,13 +188,6 @@ int main() {
 	shader.activate();
 	shader.setInt("texture1", 0);
 	shader.setInt("texture2", 1);
-	
-	// transformation
-	glm::mat4 trans = glm::mat4(1.0f);
-	trans = glm::rotate(trans, glm::radians(15.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	trans = glm::rotate(trans, glm::radians(15.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	shader.activate();
-	shader.setMat4("transform", trans);
 
 	mainJ.update();
 	if (mainJ.isPresent()) {
@@ -203,6 +196,9 @@ int main() {
 		std::cout << " Joystick is not present." << std::endl;
 	}
 	
+	x = 0.0f;
+	y = 0.0f,
+	z = 0.0f;
 
     while (!glfwWindowShouldClose(window)) {	
 		processInput(window);												
@@ -220,23 +216,28 @@ int main() {
 
 		// draw shapes
 		glBindVertexArray(VAO);
+
+		// create transformation for screen
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view =glm::mat4(1.0f);
+		glm::mat4 projection =glm::mat4(1.0f);
+
+		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f)); //why 0.5 instead of 1.0? -- https://learnopengl.com/Getting-started/Transformations#:~:text=%2C%200.0%2C-,1.0,-))%3B%0Atrans%20%3D%20glm
+		view = glm::translate(view, glm::vec3(x, y, z));
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
 		shader.activate();
 
-		//shader.setMat4("transform", transform);
+		shader.setMat4("model", model);	
+		shader.setMat4("view", view);	
+		shader.setMat4("projection", projection);	
 		shader.setFloat("mixVal", mixVal);
 
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		//trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		//shader2.activate();
-		//shader2.setMat4("transform", trans2);
-		//shader2.activate();
-		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(GLuint)));
-
 
 		glBindVertexArray(0);
 
+		// send new frame to window
         glfwSwapBuffers(window);											
         glfwPollEvents();													
     }
@@ -245,7 +246,6 @@ int main() {
 	glDeleteBuffers(1, &VBO);
 
 	std::cout << "... e n d ..." << std::endl;
-
 
     glfwTerminate();												
     return 0;
