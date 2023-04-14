@@ -200,14 +200,6 @@ int main() {
 	x = 0.0f;
 	y = 0.0f,
 	z = 3.0f;
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); // ---
-	// camre direction
-	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-	// camera right axis
-	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);									// upwards in word space
-	glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));	// vector product (vektorszorzat, jobb-kéz szabály)
-	glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 
     while (!glfwWindowShouldClose(window)) {	
 		processInput(window);												
@@ -232,7 +224,10 @@ int main() {
 		glm::mat4 projection =glm::mat4(1.0f);
 
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f)); //why 0.5 instead of 1.0? -- https://learnopengl.com/Getting-started/Transformations#:~:text=%2C%200.0%2C-,1.0,-))%3B%0Atrans%20%3D%20glm
-		view = glm::translate(view, glm::vec3(-x, -y, -z));
+		//view = glm::translate(view, glm::vec3(-x, -y, -z)); // ---
+		view = glm::lookAt(glm::vec3(x, y, z),
+						   glm::vec3(0.0f, 0.0f, 0.0f),
+						   glm::vec3(0.0f, 1.0f, 0.0f));
 		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		shader.activate();
