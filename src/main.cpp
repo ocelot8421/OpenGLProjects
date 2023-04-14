@@ -196,9 +196,18 @@ int main() {
 		std::cout << " Joystick is not present." << std::endl;
 	}
 	
+	// camera position
 	x = 0.0f;
 	y = 0.0f,
 	z = 3.0f;
+	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); // ---
+	// camre direction
+	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+	// camera right axis
+	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);									// upwards in word space
+	glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));	// vector product (vektorszorzat, jobb-kéz szabály)
+	glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 
     while (!glfwWindowShouldClose(window)) {	
 		processInput(window);												
