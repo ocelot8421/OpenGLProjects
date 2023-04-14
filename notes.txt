@@ -111,5 +111,3 @@ vao - vertex array object, vbo - vertex buffer object       Michael Grieco -- ht
 # GLM   = openGL Mathematics
 
 
-
-
