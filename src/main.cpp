@@ -22,7 +22,7 @@ void processInput(GLFWwindow *window);
 
 float mixVal = 0.5f;
 
-glm::mat4 transform = glm::mat4(1.0f);
+glm::mat4 mouseTransform = glm::mat4(1.0f);
 
 Joystick mainJ(0);
 
@@ -231,6 +231,7 @@ int main() {
 		shader.setMat4("model", model);	
 		shader.setMat4("view", view);	
 		shader.setMat4("projection", projection);	
+		shader.setMat4("mouseTransform", mouseTransform);
 		shader.setFloat("mixVal", mixVal);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -277,22 +278,27 @@ void processInput(GLFWwindow *window) {
 		}
 	}
 
-	if (Keyboard::key(GLFW_KEY_W)) {
-		transform = glm::translate(transform, glm::vec3(0.0f, 0.1f, 0.0f));
-	}
-	if (Keyboard::key(GLFW_KEY_S)) {
-		transform = glm::translate(transform, glm::vec3(0.0f, -0.1f, 0.0f));
-	}
-	if (Keyboard::key(GLFW_KEY_A)) {
-		transform = glm::translate(transform, glm::vec3(-0.1f, 0.1f, 0.0f));
-	}
-	if (Keyboard::key(GLFW_KEY_D)) {
-		transform = glm::translate(transform, glm::vec3(0.1f, 0.0f, 0.0f));
-	}
+	//if (Keyboard::key(GLFW_KEY_W)) {
+	//	transform = glm::translate(transform, glm::vec3(0.0f, 0.1f, 0.0f));
+	//}
+	//if (Keyboard::key(GLFW_KEY_S)) {
+	//	transform = glm::translate(transform, glm::vec3(0.0f, -0.1f, 0.0f));
+	//}
+	//if (Keyboard::key(GLFW_KEY_A)) {
+	//	transform = glm::translate(transform, glm::vec3(-0.1f, 0.1f, 0.0f));
+	//}
+	//if (Keyboard::key(GLFW_KEY_D)) {
+	//	transform = glm::translate(transform, glm::vec3(0.1f, 0.0f, 0.0f));
+	//}
 
-	//Joystick -- next time //TODO (0) 
-
-	mainJ.update();	
+	// mouse
+	if (Mouse::button(GLFW_MOUSE_BUTTON_LEFT)) {
+		double x = Mouse::getMouseX();
+		double y = Mouse::getMouseY();
+		std::cout << x << ' ' << y << std::endl;
+		mouseTransform = glm::mat4(1.0f);
+		mouseTransform = glm::translate(mouseTransform, glm::vec3(x, y, 0.0f));
+	}
 }
 
 
