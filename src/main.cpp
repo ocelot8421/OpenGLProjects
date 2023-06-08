@@ -143,7 +143,7 @@ std::string loadShaderSrc(const char* filename){
 		buf << file.rdbuf();
 		ret = buf.str();
 	} else {
-		std::cout << "Could not open " << filename << std::endl;
+		std::cout << "Could not open... " << filename << std::endl;
 	}
 	file.close(); 
 	return ret;
