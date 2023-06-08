@@ -120,9 +120,11 @@ int main()
 	float a_b = (b * b - a * a - c * c) / (-2 * a); // b oldal vetülete a-ra (nominális)
 	float a_c = -a + a_b;							// c oldal vetülete a-ra
 	float mA = std::sqrt(c * c - a_b * a_b);
+	float dif = a / 2 - a_b;
 
-	float Bx = a_b / widthView;
-	float Ax = a_c / widthView;
+	float Bx = (a_b + dif) / widthView;
+	float Ax = (a_c + dif) / widthView;
+	float Cx = (0 + dif) / widthView;
 
 	float Cy = mA / 2 / heightView;
 	float By = -Cy;
@@ -130,11 +132,13 @@ int main()
 
 	// vertex array
 	float vertices[] = {
-		Bx, 0.0f, 0.0f,
-		Ax, 0.0f, 0.0f,
-		0.0f, Cy, 0.0f};
+		Bx, By, 0.0f,
+		Ax, Ay, 0.0f,
+		Cx, Cy, 0.0f};
 
-	std::cout << "Bx: " << Bx << " -- Ax: " << Ax << " -- mA: " << mA << " -- Cy: " << Cy << std::endl;
+	std::cout << "A point: " << Ax << ", " << Ay << "\n"
+			  << "B: " << Bx << "," << Bx << "\n"
+			  << "C: " << Cx << ", " << Cy << std::endl;
 	// VAO, VBO
 	unsigned int VAO;
 	unsigned int VBO;
