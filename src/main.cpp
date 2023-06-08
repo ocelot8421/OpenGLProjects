@@ -23,6 +23,7 @@ int main()
 	float margin = 10;
 	float widthView = widthWindow - 2 * margin;
 	float heightView = heightWindow - 2 * margin;
+	float pi = 3.14159265358979323846;
 
 	char markers[] = {'a',
 					  'b',
@@ -40,7 +41,7 @@ int main()
 	float a = sides[0];
 	float b = sides[1];
 	float c = sides[2];
-	float delta = 0;
+	float angDegRot = 25;
 
 	int success;
 	char infoLog[512];
@@ -138,15 +139,36 @@ int main()
 	float By = -Cy;
 	float Ay = By;
 
+	float angRadRot = 2 * pi * angDegRot / 360;
+
+	float rA = std::sqrt(Ax * Ax + Ay * Ay);
+	float angA = acos(Ax / rA);
+	float Ax2 = rA * std::cos(angA + angRadRot);
+	float Ay2 = rA * std::sin(angA + angRadRot);
+
+	float rB = std::sqrt(Bx * Bx + By * By);
+	float angB = acos(Bx / rB);
+	float Bx2 = rB * std::cos(angB + angRadRot);
+	float By2 = rB * std::sin(angB + angRadRot);
+
+	float rC = std::sqrt(Cx * Cx + Cy * Cy);
+	float angC = acos(Cx / rC);
+	float Cx2 = rC * std::cos(angC + angRadRot);
+	float Cy2 = rC * std::sin(angC + angRadRot);
+
 	// vertex array
 	float vertices[] = {
-		Bx, By, 0.0f,
-		Ax, Ay, 0.0f,
-		Cx, Cy, 0.0f};
+		Bx2, By2, 0.0f,
+		Ax2, Ay2, 0.0f,
+		Cx2, Cy2, 0.0f};
 
 	std::cout << "A: " << Ax << ", " << Ay << "\n"
 			  << "B: " << Bx << ", " << By << "\n"
-			  << "C: " << Cx << ", " << Cy << std::endl;
+			  << "C: " << Cx << ", " << Cy << "\n";
+
+	std::cout << "A2: " << Ax2 << ", " << Ay2 << "\n"
+			  << "B2: " << Bx2 << ", " << By2 << "\n"
+			  << "C2: " << Cx2 << ", " << Cy2 << "\n";
 	// VAO, VBO
 	unsigned int VAO;
 	unsigned int VBO;
