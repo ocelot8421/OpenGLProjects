@@ -6,10 +6,13 @@
 #include <sstream>
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 std::string loadShaderSrc(const char *filename);
+
+bool comp(int f1, int f2);
 
 int main()
 {
@@ -109,8 +112,7 @@ int main()
 	if (!success)
 	{
 		glGetShaderInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "Linking error: " << std::endl
-				  << infoLog << std::endl;
+		std::cout << "Linking error: " << infoLog << std::endl;
 	}
 
 	glDeleteShader(vertexShader);
@@ -120,11 +122,17 @@ int main()
 	float a_b = (b * b - a * a - c * c) / (-2 * a); // b oldal vetülete a-ra (nominális)
 	float a_c = -a + a_b;							// c oldal vetülete a-ra
 	float mA = std::sqrt(c * c - a_b * a_b);
-	float dif = a / 2 - a_b;
 
-	float Bx = (a_b + dif) / widthView;
-	float Ax = (a_c + dif) / widthView;
-	float Cx = (0 + dif) / widthView;
+	float w = std::max({a, a_b, a_c}, comp);
+	std::cout << a << std::endl;
+	std::cout << a_b << std::endl;
+	std::cout << a_c << std::endl;
+	std::cout << w << std::endl;
+	float difOx = w / 2 - a_b;
+
+	float Bx = (a_b + difOx) / widthView;
+	float Ax = (a_c + difOx) / widthView;
+	float Cx = (0 + difOx) / widthView;
 
 	float Cy = mA / 2 / heightView;
 	float By = -Cy;
@@ -136,8 +144,8 @@ int main()
 		Ax, Ay, 0.0f,
 		Cx, Cy, 0.0f};
 
-	std::cout << "A point: " << Ax << ", " << Ay << "\n"
-			  << "B: " << Bx << "," << Bx << "\n"
+	std::cout << "A: " << Ax << ", " << Ay << "\n"
+			  << "B: " << Bx << ", " << By << "\n"
 			  << "C: " << Cx << ", " << Cy << std::endl;
 	// VAO, VBO
 	unsigned int VAO;
@@ -201,4 +209,9 @@ std::string loadShaderSrc(const char *filename)
 	}
 	file.close();
 	return ret;
+}
+
+bool comp(int f1, int f2)
+{
+	return (f1 < f2);
 }
