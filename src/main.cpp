@@ -16,7 +16,7 @@ bool comp(int f1, int f2);
 
 int main()
 {
-	std::cout << "main starting..." << std::endl;
+	std::cout << "main starting... " << std::endl;
 
 	float widthWindow = 900;
 	float heightWindow = 600;
